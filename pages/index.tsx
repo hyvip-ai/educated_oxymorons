@@ -13,12 +13,21 @@ const Home: NextPage = () => {
       </h1>
       <p className='text-center'> What you want to do? </p>
       <div>
-        <button>Check the type of comic we make currently</button>
-        <button>Check all published comics</button>
-        <button>Check REIMAGINED comics</button>
-        <button>Check AFTERLIFE comics</button>
-        <button>Check TAUNTING comics</button>
-        <button></button>
+        <button className='btn btn-outline-primary'>
+          Check the &quot;Type of Comics&quot; we make currently
+        </button>
+        <button className='btn btn-outline-info'>
+          Check &quot;REIMAGINED&quot; comics
+        </button>
+        <button className='btn btn-outline-primary'>
+          Check &quot;AFTERLIFE&quot; comics
+        </button>
+        <button className='btn btn-outline-info'>
+          Check &quot;TAUNTING&quot; comics
+        </button>
+        <button className='btn btn-outline-primary'>
+          Check &quot;MEMES&quot;
+        </button>
       </div>
     </>
   );
