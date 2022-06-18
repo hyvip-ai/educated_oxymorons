@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import SEO from '../components/SEO';
+import Link from 'next/link';
 
 const Home: NextPage = () => {
   return (
@@ -14,19 +15,21 @@ const Home: NextPage = () => {
       <p className='text-center'> What you want to do? </p>
       <div>
         <button className='btn btn-outline-primary'>
-          Check the &quot;Type of Comics&quot; we make currently
+          <Link href='/comicTypes'>
+            Check the &quot;Type of Comics&quot; we make currently
+          </Link>
         </button>
         <button className='btn btn-outline-info'>
-          Check &quot;REIMAGINED&quot; comics
+          <Link href='/reimagined'>Check &quot;REIMAGINED&quot; comics</Link>
         </button>
         <button className='btn btn-outline-primary'>
-          Check &quot;AFTERLIFE&quot; comics
+          <Link href='/afterlife'>Check &quot;AFTERLIFE&quot; comics</Link>
         </button>
         <button className='btn btn-outline-info'>
-          Check &quot;TAUNTING&quot; comics
+          <Link href='/taunts'>Check &quot;TAUNTING&quot; comics</Link>
         </button>
         <button className='btn btn-outline-primary'>
-          Check &quot;MEMES&quot;
+          <Link href='/memes'>Check &quot;MEMES&quot;</Link>
         </button>
       </div>
     </>

@@ -10,7 +10,7 @@ function SEO(props: headProps) {
   return (
     <Head>
       <title>{props.title} | Educated Oxymorons</title>
-      <meta name='description' content={props.description}></meta>
+      <meta name='description' content={props.description} />
     </Head>
   );
 }
