@@ -16,22 +16,22 @@ body {
 }
 
 
-button {
+.index_btn {
   display: block !important;
   margin: 1rem auto;
   width: 80%;
 }
 
-button:active {
+.index_btn:active {
   transform: scale(0.95);
 }
 
-button:focus {
+.index_btn:focus {
   box-shadow: none !important;
 
 }
 
-button a {
+.index_btn a {
   text-decoration: none;
   display: block;
   height: 100%;
@@ -39,10 +39,14 @@ button a {
   color: inherit;
 }
 
-button a:hover {
+.index_btn a:hover {
   color: inherit;
 }
 
+.back_button_container {
+  top: 0;
+  left: 0;
+}
 
 .previous {
   text-decoration: none;
@@ -68,4 +72,15 @@ button a:hover {
 
 .previous:active {
   transform: scale(0.95);
+}
+
+.layout {
+  margin: 100px auto;
+  width: 80%;
+}
+
+@media(max-width: 768px) {
+  .layout {
+    width: 100%;
+  }
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import BackButton from '../components/BackButton';
+import Layout from '../components/Layout';
 import SEO from '../components/SEO';
 
 function memes() {
@@ -7,6 +8,7 @@ function memes() {
     <>
       <SEO title='Meme' description='This page contains all the memes' />
       <BackButton />
+      <Layout>Something</Layout>
     </>
   );
 }
