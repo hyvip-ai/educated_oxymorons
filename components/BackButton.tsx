@@ -13,6 +13,7 @@ function BackButton() {
             layout='fill'
             className='rounded-circle'
             objectFit='contain'
+            priority={true}
           />
         </a>
       </Link>

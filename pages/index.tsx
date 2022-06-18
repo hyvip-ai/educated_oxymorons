@@ -32,6 +32,9 @@ const Home: NextPage = () => {
         <button className='btn index_btn btn-outline-primary'>
           <Link href='/memes'>Check &quot;MEMES&quot;</Link>
         </button>
+        <button className='btn index_btn btn-outline-info'>
+          <Link href='/idea'>Check &quot;Add An Idea&quot;</Link>
+        </button>
       </div>
     </Layout>
   );
