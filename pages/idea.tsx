@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SEO from '../components/SEO';
 import Layout from '../components/Layout';
 import BackButton from '../components/BackButton';
@@ -6,6 +6,8 @@ import supabase from '../utils/supabase';
 import { GetServerSideProps } from 'next';
 import { comicTypes } from '../types/comicTypes';
 import Select from 'react-select';
+import Meme from '../components/Forms/Meme';
+import Comic from '../components/Forms/Comic';
 
 const customStyles = {
   option: (provided: any, state: any) => ({
@@ -56,8 +58,15 @@ export const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 
+interface Options {
+  value: string;
+  label: string;
+}
+
 function Idea(props: typesProps) {
-  const typeOptions = props.types.map((item) => ({
+  const [type, setType] = useState<string>('');
+
+  const typeOptions: Options[] = props.types.map((item) => ({
     label: item.name,
     value: item.name,
   }));
@@ -69,12 +78,22 @@ function Idea(props: typesProps) {
       />
       <BackButton />
       <Layout>
+        <h2 className='text-center mb-4'>Register your idea</h2>
         <Select
           placeholder='Select idea type'
           name='types'
           options={typeOptions}
           styles={customStyles}
+          onChange={(value) => setType(value!.value)}
         />
+        {type === '' ? (
+          <h3 className='text-center mt-4'>
+            Please select your idea type to register it
+          </h3>
+        ) : null}
+        <section className='mt-4'>
+          {type === 'Meme' ? <Meme /> : type !== '' ? <Comic /> : null}
+        </section>
       </Layout>
     </>
   );

@@ -95,7 +95,8 @@ body {
   background-size: calc(.75em + .375rem) calc(.75em + .375rem);
 }
 
-input:focus {
+input:focus,
+textarea:focus {
   box-shadow: none !important;
   border-color: inherit;
 }
@@ -115,6 +116,6 @@ input:focus {
 
 @media(max-width: 768px) {
   .layout {
-    width: 100%;
+    width: 90%;
   }
 }
