@@ -45,7 +45,7 @@ function Comic() {
         <TextArea name='description' placeholder='Enter comic description' />
         <div>
           <button
-            className='btn btn-outline-primary ms-auto d-block'
+            className='btn btn-outline-primary ms-auto d-block mb-3'
             type='button'
             onClick={() => setPages((prev) => ++prev)}
           >
