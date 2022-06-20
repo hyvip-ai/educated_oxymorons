@@ -21,6 +21,7 @@ function TextArea(props: InputProps) {
     <>
       <Form.Control
         as='textarea'
+        rows={4}
         placeholder={props.placeholder}
         {...register(props.name)}
         className={`${props.className} ${

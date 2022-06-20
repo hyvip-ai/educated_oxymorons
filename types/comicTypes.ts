@@ -24,4 +24,5 @@ export interface Comic {
   created_at: string;
   type: string;
   id: string;
+  published: boolean;
 }

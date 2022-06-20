@@ -118,9 +118,10 @@ function Comic(props: comicProps) {
           <button
             type='submit'
             className='btn btn-outline-success d-block ms-auto'
+            disabled={loading}
           >
             <div className='d-flex align-items-center justify-content-between'>
-              <span className={loading ? 'me-3' : ''}> Add Idea </span>
+              <span className={loading ? 'me-3' : ''}> Add Comic Idea </span>
               <ClipLoader size={25} color='' loading={loading} />
             </div>
           </button>

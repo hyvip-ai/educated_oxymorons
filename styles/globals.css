@@ -118,6 +118,23 @@ textarea:focus {
   cursor: pointer;
 }
 
+.file-input {
+  height: 10rem;
+  width: 250px;
+}
+
+.image-outer-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-wrapper {
+  height: 250px;
+  width: 250px;
+  margin-right: 2rem;
+  position: relative;
+}
+
 @media(max-width: 768px) {
   .layout {
     width: 90%;
