@@ -1,12 +1,19 @@
 import React, { Fragment, useState } from 'react';
 import { Form } from 'react-bootstrap';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider, useFieldArray } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Input from '../FormInputs/Input';
 import TextArea from '../FormInputs/TextArea';
 import PageForm from './PageForm';
 import { idea } from '../../types/comicTypes';
+import supabase from '../../utils/supabase';
+import { toast } from 'react-toastify';
+import { ClipLoader } from 'react-spinners';
+import { useRouter } from 'next/router';
+interface comicProps {
+  type: string;
+}
 
 const schema = yup.object().shape({
   title: yup.string().trim().required('Comic title is required'),
@@ -21,6 +28,7 @@ const schema = yup.object().shape({
         .string()
         .trim()
         .required('Image description is required'),
+      imageLink: yup.string().trim(),
     })
   ),
 });
@@ -31,12 +39,36 @@ const defaultValues: idea = {
   pages: [],
 };
 
-function Comic() {
+function Comic(props: comicProps) {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const methods = useForm({ resolver: yupResolver(schema), defaultValues });
-  const [pages, setPages] = useState(0);
-
+  const { fields, append, remove } = useFieldArray({
+    control: methods.control,
+    name: 'pages',
+  });
   const onSubmit = async (formData: idea) => {
-    console.log(formData);
+    setLoading(true);
+    if (!formData.pages.length) {
+      toast.error('You need to add minimum of one page');
+      setLoading(false);
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('comic')
+      .insert([{ ...formData, type: props.type }]);
+    setLoading(false);
+    if (data) {
+      toast.success(
+        `New Comic Idea names "${data[0].title}" Added Successfully`
+      );
+      router.push('/');
+    }
+
+    if (error) {
+      toast.error(error.message);
+    }
   };
   return (
     <FormProvider {...methods}>
@@ -47,7 +79,13 @@ function Comic() {
           <button
             className='btn btn-outline-primary ms-auto d-block mb-3'
             type='button'
-            onClick={() => setPages((prev) => ++prev)}
+            onClick={() =>
+              append({
+                pageConversation: '',
+                imageDescription: '',
+                imageLink: '',
+              })
+            }
           >
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -61,21 +99,30 @@ function Comic() {
             </svg>
             Add Page
           </button>
-          {pages > 0
-            ? [...Array(pages).keys()].map((item) => (
-                <section key={item} className='mb-4'>
-                  <h5 className='mb-3'>Page {item + 1}</h5>
-                  <PageForm />
-                </section>
-              ))
-            : null}
+          {fields.map((item, index) => (
+            <section key={item.id} className='mb-4'>
+              <div className='d-flex mb-3 align-items-center justify-content-between'>
+                <h5 className='mb-0'>Page {index + 1}</h5>
+                <button
+                  className='btn btn-outline-danger'
+                  onClick={() => remove(index)}
+                >
+                  Remove
+                </button>
+              </div>
+              <PageForm id={index} name='pages' />
+            </section>
+          ))}
         </div>
         <div>
           <button
             type='submit'
-            className='btn btn-outline-success w-25 d-block ms-auto'
+            className='btn btn-outline-success d-block ms-auto'
           >
-            Add Idea
+            <div className='d-flex align-items-center justify-content-between'>
+              <span className={loading ? 'me-3' : ''}> Add Idea </span>
+              <ClipLoader size={25} color='' loading={loading} />
+            </div>
           </button>
         </div>
       </Form>

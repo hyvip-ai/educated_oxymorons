@@ -114,6 +114,10 @@ textarea:focus {
   height: 32px;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 @media(max-width: 768px) {
   .layout {
     width: 90%;

@@ -92,7 +92,11 @@ function Idea(props: typesProps) {
           </h3>
         ) : null}
         <section className='mt-4'>
-          {type === 'Meme' ? <Meme /> : type !== '' ? <Comic /> : null}
+          {type === 'Meme' ? (
+            <Meme />
+          ) : type !== '' ? (
+            <Comic type={type} />
+          ) : null}
         </section>
       </Layout>
     </>

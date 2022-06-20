@@ -14,4 +14,14 @@ export interface idea {
 interface page {
   pageConversation: string;
   imageDescription: string;
+  imageLink: string;
+}
+
+export interface Comic {
+  title: string;
+  description: string;
+  pages: page[];
+  created_at: string;
+  type: string;
+  id: string;
 }
