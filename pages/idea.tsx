@@ -93,7 +93,7 @@ function Idea(props: typesProps) {
           </h3>
         ) : null}
         <section className='mt-4'>
-          {type === 'Meme' ? (
+          {type.toLowerCase().includes('meme') ? (
             <Meme />
           ) : type !== '' ? (
             <Comic type={type} />

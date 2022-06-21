@@ -144,7 +144,7 @@ function Meme() {
               disabled={uploadingFile || loading}
             >
               <div className='d-flex align-items-center justify-content-between'>
-                <span className={loading ? 'me-3' : ''}> Add Comic Idea </span>
+                <span className={loading ? 'me-3' : ''}> Add Meme Idea </span>
                 <ClipLoader size={25} color='' loading={loading} />
               </div>
             </button>
