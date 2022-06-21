@@ -26,3 +26,11 @@ export interface Comic {
   id: string;
   published: boolean;
 }
+
+export interface Meme {
+  created_at: string;
+  id: string;
+  memeDescription: string;
+  memeTemplates: string[];
+  published: boolean;
+}

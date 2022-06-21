@@ -8,6 +8,8 @@ import { ClipLoader } from 'react-spinners';
 import supabase from '../../utils/supabase';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import BlurImage from '../BlurImage';
 
 interface formData {
   memeDescription: string;
@@ -22,6 +24,8 @@ const defaultValues: formData = {
 };
 
 function Meme() {
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [imageUrl, setImageUrl] = useState<string[]>([]);
@@ -57,12 +61,26 @@ function Meme() {
     }
   };
 
-  const onsubmit = (formData: formData) => {
+  const onsubmit = async (formData: formData) => {
+    setLoading(true);
     if (!imageUrl.length) {
       toast.error('You need to upload minimum one image');
       return;
     }
-    console.log(formData);
+    const myMemeData = { ...formData, memeTemplates: imageUrl };
+    const { data, error } = await supabase
+      .from('memes')
+      .insert([{ ...myMemeData }]);
+
+    setLoading(false);
+
+    if (error) {
+      toast.error(error.message);
+    }
+    if (data) {
+      toast.success('Meme updated successfully');
+      router.push('/memes');
+    }
   };
 
   return (
@@ -109,7 +127,7 @@ function Meme() {
               <div className='image-outer-wrapper'>
                 {imageUrl.map((image, index) => (
                   <div className='image-wrapper' key={image}>
-                    <Image
+                    <BlurImage
                       src={image}
                       alt='meme-template'
                       layout='fill'
@@ -124,7 +142,7 @@ function Meme() {
             <button
               type='submit'
               className='btn btn-outline-success d-block ms-auto'
-              disabled={uploadingFile}
+              disabled={uploadingFile || loading}
             >
               <div className='d-flex align-items-center justify-content-between'>
                 <span className={loading ? 'me-3' : ''}> Add Comic Idea </span>

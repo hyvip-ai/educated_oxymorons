@@ -135,6 +135,42 @@ textarea:focus {
   position: relative;
 }
 
+.duration-700 {
+  transition-duration: 700ms;
+}
+
+.ease-in-out {
+  transition-timing-function: ease-in-out;
+}
+
+.grayscale-0 {
+  filter: grayscale(0);
+}
+
+.grayscale {
+  filter: grayscale(100%);
+}
+
+.blur-2xl {
+  filter: blur(40px);
+}
+
+.blur-0 {
+  filter: blur(0);
+}
+
+.scale-100 {
+  transform: scale(1);
+}
+
+.scale-110 {
+  transform: scale(1.1);
+}
+
+table {
+  width: 100%;
+}
+
 @media(max-width: 768px) {
   .layout {
     width: 90%;
