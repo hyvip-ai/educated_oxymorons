@@ -17,7 +17,13 @@ export const getServerSideProps: GetServerSideProps = async (
 
   if (error) {
     return {
-      props: {},
+      props: {
+        meme: {
+          memeDescription: '',
+          memeTemplates: [],
+          published: '',
+        },
+      },
     };
   }
 

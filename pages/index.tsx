@@ -12,7 +12,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
     .eq('active', true);
   if (error) {
     return {
-      props: {},
+      props: {
+        types: [],
+      },
     };
   }
   return {

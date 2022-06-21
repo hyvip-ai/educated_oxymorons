@@ -28,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (
     .eq('type', comicType);
   if (error) {
     return {
-      props: { comic: [] },
+      props: { comics: [], comicType: '' },
     };
   }
 

@@ -46,6 +46,7 @@ body {
 .back_button_container {
   top: 0;
   left: 0;
+  z-index: 50;
 }
 
 .previous {
@@ -170,6 +171,12 @@ textarea:focus {
 table {
   width: 100%;
 }
+
+
+input[type='checkbox'] {
+  cursor: pointer;
+}
+
 
 @media(max-width: 768px) {
   .layout {

@@ -20,7 +20,14 @@ export const getServerSideProps: GetServerSideProps = async (
 
   if (error) {
     return {
-      props: {},
+      props: {
+        comic: {
+          title: '',
+          description: '',
+          type: '',
+          pages: [],
+        },
+      },
     };
   }
   return {
@@ -31,7 +38,6 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 function ComicDescription(props: ComicDescriptionProps) {
-  console.log(props);
   return (
     <>
       <SEO
