@@ -1,24 +1,31 @@
 import { RealtimeSubscription } from '@supabase/supabase-js';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import React, { useEffect, useState } from 'react';
 import { Form, Table } from 'react-bootstrap';
 import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
-import BackButton from '../components/BackButton';
-import Layout from '../components/Layout';
-import SEO from '../components/SEO';
-import { Comic } from '../types/comicTypes';
-import supabase from '../utils/supabase';
+import BackButton from '../../components/BackButton';
+import Layout from '../../components/Layout';
+import SEO from '../../components/SEO';
+import { Comic } from '../../types/comicTypes';
+import supabase from '../../utils/supabase';
 
-interface reimaginedProps {
+interface ComicTableProps {
   comics: Comic[];
+  comicType: string;
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const comicType =
+    context.query.comic![0].toUpperCase() + context.query.comic!.slice(1);
+
+  console.log(comicType);
   let { data: comics, error } = await supabase
     .from('comic')
     .select('*')
-    .eq('type', 'Reimagined');
+    .eq('type', comicType);
   if (error) {
     return {
       props: { comic: [] },
@@ -28,11 +35,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       comics,
+      comicType,
     },
   };
 };
 
-function Reimagined(props: reimaginedProps) {
+function ComicTable(props: ComicTableProps) {
   const [comics, setComics] = useState<Comic[]>(props.comics);
   const [loading, setLoading] = useState<null | string>(null);
   const togglePublish = async (
@@ -81,8 +89,8 @@ function Reimagined(props: reimaginedProps) {
   return (
     <>
       <SEO
-        title='Reimagined'
-        description='This page contains all the REIMAGINED comics'
+        title={props.comicType}
+        description={`This page contains all the ${props.comicType} comics`}
       />
       <BackButton />
       <Layout>
@@ -131,6 +139,7 @@ function Reimagined(props: reimaginedProps) {
                   <th>Description</th>
                   <th>Published</th>
                   <th>Toggle</th>
+                  <th>action</th>
                 </tr>
               </thead>
               <tbody>
@@ -140,19 +149,26 @@ function Reimagined(props: reimaginedProps) {
                     <td>{item.title}</td>
                     <td>{`${item.description}`}</td>
                     <td>{`${item.published}`}</td>
-                    <td className='d-flex align-items-center'>
-                      <Form.Check
-                        className='me-3'
-                        checked={item.published}
-                        onChange={(e) => togglePublish(e, item.id)}
-                      />
-                      <div className='loader_layout'>
-                        <ClipLoader
-                          size={25}
-                          color=''
-                          loading={loading === item.id}
+                    <td>
+                      <div className='d-flex align-items-center'>
+                        <Form.Check
+                          className='me-3'
+                          checked={item.published}
+                          onChange={(e) => togglePublish(e, item.id)}
                         />
+                        <div className='loader_layout'>
+                          <ClipLoader
+                            size={25}
+                            color=''
+                            loading={loading === item.id}
+                          />
+                        </div>
                       </div>
+                    </td>
+                    <td>
+                      <button className='btn btn-outline-primary'>
+                        View Comic
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -167,4 +183,4 @@ function Reimagined(props: reimaginedProps) {
   );
 }
 
-export default Reimagined;
+export default ComicTable;

@@ -41,7 +41,8 @@ interface typesProps {
 export const getServerSideProps: GetServerSideProps = async () => {
   let { data: comic_types, error } = await supabase
     .from<comicTypes>('comic_types')
-    .select('*');
+    .select('*')
+    .eq('active', true);
 
   if (error) {
     return {

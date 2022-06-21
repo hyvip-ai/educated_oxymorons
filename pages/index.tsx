@@ -1,9 +1,32 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import SEO from '../components/SEO';
 import Link from 'next/link';
 import Layout from '../components/Layout';
+import supabase from '../utils/supabase';
+import { comicTypes } from '../types/comicTypes';
 
-const Home: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { data: types, error } = await supabase
+    .from('comic_types')
+    .select('*')
+    .eq('active', true);
+  if (error) {
+    return {
+      props: {},
+    };
+  }
+  return {
+    props: {
+      types,
+    },
+  };
+};
+
+interface homeProps {
+  types: comicTypes[];
+}
+
+const Home = (props: homeProps) => {
   return (
     <Layout>
       <SEO
@@ -20,19 +43,22 @@ const Home: NextPage = () => {
             Check the &quot;Type of Comics&quot; we make currently
           </Link>
         </button>
-        <button className='btn index_btn btn-outline-info'>
-          <Link href='/reimagined'>Check &quot;REIMAGINED&quot; comics</Link>
-        </button>
-        <button className='btn index_btn btn-outline-primary'>
-          <Link href='/afterlife'>Check &quot;AFTERLIFE&quot; comics</Link>
-        </button>
-        <button className='btn index_btn btn-outline-info'>
-          <Link href='/taunts'>Check &quot;TAUNTING&quot; comics</Link>
-        </button>
-        <button className='btn index_btn btn-outline-primary'>
-          <Link href='/memes'>Check &quot;MEMES&quot;</Link>
-        </button>
-        <button className='btn index_btn btn-outline-info'>
+        {props.types.map((item, index) => (
+          <button
+            className={`btn index_btn btn-outline-${
+              index % 2 ? 'primary' : 'info'
+            }`}
+            key={item.id}
+          >
+            <Link href={`/${item.name.toLowerCase()}`}>
+              <a>
+                Check &quot;{item.name.toUpperCase()}&quot;{' '}
+                {item.name === 'Memes' ? '' : 'comics'}
+              </a>
+            </Link>
+          </button>
+        ))}
+        <button className='btn index_btn btn-outline-success'>
           <Link href='/idea'>&quot;Add An Idea&quot;</Link>
         </button>
       </div>
