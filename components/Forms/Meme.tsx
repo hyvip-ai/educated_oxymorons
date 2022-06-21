@@ -47,7 +47,6 @@ function Meme() {
     }
     if (data) {
       toast.success('Image uploaded successfully');
-      console.log(data);
     }
     const { publicURL, error: urlError } = supabase.storage
       .from('meme-templates')

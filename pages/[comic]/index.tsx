@@ -1,5 +1,6 @@
 import { RealtimeSubscription } from '@supabase/supabase-js';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { Form, Table } from 'react-bootstrap';
 import { ClipLoader } from 'react-spinners';
@@ -21,7 +22,6 @@ export const getServerSideProps: GetServerSideProps = async (
   const comicType =
     context.query.comic![0].toUpperCase() + context.query.comic!.slice(1);
 
-  console.log(comicType);
   let { data: comics, error } = await supabase
     .from('comic')
     .select('*')
@@ -41,6 +41,7 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 function ComicTable(props: ComicTableProps) {
+  const router = useRouter();
   const [comics, setComics] = useState<Comic[]>(props.comics);
   const [loading, setLoading] = useState<null | string>(null);
   const togglePublish = async (
@@ -166,7 +167,12 @@ function ComicTable(props: ComicTableProps) {
                       </div>
                     </td>
                     <td>
-                      <button className='btn btn-outline-primary'>
+                      <button
+                        className='btn btn-outline-primary'
+                        onClick={() => {
+                          router.push(`/${props.comicType}/${item.id}`);
+                        }}
+                      >
                         View Comic
                       </button>
                     </td>
