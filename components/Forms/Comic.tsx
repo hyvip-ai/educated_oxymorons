@@ -63,7 +63,7 @@ function Comic(props: comicProps) {
       toast.success(
         `New Comic Idea names "${data[0].title}" Added Successfully`
       );
-      router.push('/');
+      router.push(`/${props.type.toLowerCase()}`);
     }
 
     if (error) {

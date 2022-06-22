@@ -45,7 +45,7 @@ function MemeDescription(props: MemeDescriptionProps) {
         title='Meme Description'
         description='This page contains description of a meme'
       />
-      <BackButton />
+      <BackButton href='/memes' />
       <Layout>
         <h3>Meme Description:</h3>
         <p>{props.meme.memeDescription}</p>

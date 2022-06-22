@@ -1,4 +1,5 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { useRouter } from 'next/router';
 import React, { Fragment } from 'react';
 import BackButton from '../../components/BackButton';
 import Layout from '../../components/Layout';
@@ -38,13 +39,17 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 function ComicDescription(props: ComicDescriptionProps) {
+  const {
+    query: { comic },
+  } = useRouter();
+
   return (
     <>
       <SEO
         title='Comic Description'
         description='This page contains description for a specific comic'
       />
-      <BackButton />
+      <BackButton href={`/${comic}`} />
       <Layout>
         <h3>Comic Name:</h3>
         <p>{props.comic.title}</p>
