@@ -19,8 +19,10 @@ interface ComicTableProps {
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const comicType =
-    context.query.comic![0].toUpperCase() + context.query.comic!.slice(1);
+  const comicType = (context.query.comic as string)
+    .split(' ')
+    .map((item) => `${item[0].toUpperCase()}${item.slice(1)}`)
+    .join(' ');
 
   let { data: comics, error } = await supabase
     .from('comic')
