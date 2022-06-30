@@ -1,11 +1,11 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import React, { Fragment } from 'react';
-import BackButton from '../../components/BackButton';
-import Layout from '../../components/Layout';
-import SEO from '../../components/SEO';
-import { Comic } from '../../types/comicTypes';
-import supabase from '../../utils/supabase';
+import BackButton from '../../../components/BackButton';
+import Layout from '../../../components/Layout';
+import SEO from '../../../components/SEO';
+import { Comic } from '../../../types/comicTypes';
+import supabase from '../../../utils/supabase';
 
 interface ComicDescriptionProps {
   comic: Comic;

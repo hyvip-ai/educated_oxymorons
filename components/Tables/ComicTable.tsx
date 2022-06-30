@@ -65,7 +65,14 @@ function ComicTable(props: ComicTableProps) {
                   >
                     View Comic
                   </Dropdown.Item>
-                  <Dropdown.Item eventKey='edit'>Edit Comic</Dropdown.Item>
+                  <Dropdown.Item
+                    eventKey='edit'
+                    onClick={() => {
+                      router.push(`/${props.comicType}/${item.id}/edit`);
+                    }}
+                  >
+                    Edit Comic
+                  </Dropdown.Item>
                 </DropdownButton>
               </td>
             </tr>
