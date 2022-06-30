@@ -2,7 +2,7 @@ import { RealtimeSubscription } from '@supabase/supabase-js';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { Form, Table } from 'react-bootstrap';
+import { Dropdown, Form, Table, DropdownButton } from 'react-bootstrap';
 import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import BackButton from '../../components/BackButton';
@@ -169,14 +169,23 @@ function ComicTable(props: ComicTableProps) {
                       </div>
                     </td>
                     <td>
-                      <button
-                        className='btn btn-outline-primary'
-                        onClick={() => {
-                          router.push(`/${props.comicType}/${item.id}`);
-                        }}
+                      <DropdownButton
+                        drop='start'
+                        variant='outline-primary'
+                        title='Options'
                       >
-                        View Comic
-                      </button>
+                        <Dropdown.Item
+                          eventKey='view'
+                          onClick={() => {
+                            router.push(`/${props.comicType}/${item.id}`);
+                          }}
+                        >
+                          View Comic
+                        </Dropdown.Item>
+                        <Dropdown.Item eventKey='edit'>
+                          Edit Comic
+                        </Dropdown.Item>
+                      </DropdownButton>
                     </td>
                   </tr>
                 ))}
