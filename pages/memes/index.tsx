@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 };
 
 function Memes(props: memeProps) {
-  const [filterData, setFilterData] = useState('all');
+  const [filterData, setFilterData] = useState<string>('all');
   const [memes, setMemes] = useState<Meme[]>(props.memes);
   const [publishedMemes, setPublishedMemes] = useState<Meme[]>([]);
   const [unpublishedMemes, setUnpublishedMemes] = useState<Meme[]>([]);
