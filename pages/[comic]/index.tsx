@@ -32,7 +32,6 @@ export const getServerSideProps: GetServerSideProps = async (
       props: { comics: [], comicType: '' },
     };
   }
-
   return {
     props: {
       comics,
@@ -95,6 +94,20 @@ function Comic(props: ComicTableProps) {
     await supabase.removeSubscription(subscription);
   }
 
+  const handleDeleteComic = async (comicId:string) => {
+    const { data, error } = await supabase
+      .from('comic')
+      .delete()
+      .eq('id', comicId);
+      if(data){
+        toast.success("Comci deleted successfully");
+        setComics(comics.filter((comic) =>comic.id !== comicId))
+      }
+      else if(error){
+        toast.error('Error occurred while deleting comic');
+      }
+  };
+
   return (
     <>
       <SEO
@@ -111,6 +124,7 @@ function Comic(props: ComicTableProps) {
               comics={comics}
               togglePublish={togglePublish}
               loading={loading}
+              handleDeleteComic={handleDeleteComic}
             />
           ) : (
             <h2 className='text-center text-danger'>No Entry Found</h2>
@@ -123,6 +137,7 @@ function Comic(props: ComicTableProps) {
               comics={publishedComics}
               togglePublish={togglePublish}
               loading={loading}
+              handleDeleteComic={handleDeleteComic}
             />
           ) : (
             <h2 className='text-center text-danger'>No Entry Found</h2>
@@ -136,6 +151,7 @@ function Comic(props: ComicTableProps) {
               comics={unPublishedComics}
               togglePublish={togglePublish}
               loading={loading}
+              handleDeleteComic={handleDeleteComic}
             />
           ) : (
             <h2 className='text-center text-danger'>No Entry Found</h2>

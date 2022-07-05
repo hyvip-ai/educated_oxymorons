@@ -49,7 +49,7 @@ function ComicDescription(props: ComicDescriptionProps) {
         title='Comic Description'
         description='This page contains description for a specific comic'
       />
-      <BackButton href={`/${comic}`} />
+      <BackButton />
       <Layout>
         <h3>Comic Name:</h3>
         <p>{props.comic.title}</p>

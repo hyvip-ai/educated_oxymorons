@@ -9,6 +9,7 @@ interface ComicTableProps {
   loading: null | string;
   comicType: string;
   togglePublish: Function;
+  handleDeleteComic: (comicId: string) => void;
 }
 
 function ComicTable(props: ComicTableProps) {
@@ -72,6 +73,12 @@ function ComicTable(props: ComicTableProps) {
                     }}
                   >
                     Edit Comic
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    eventKey='edit'
+                    onClick={() => props.handleDeleteComic(item.id)}
+                  >
+                    Delete Comic
                   </Dropdown.Item>
                 </DropdownButton>
               </td>
