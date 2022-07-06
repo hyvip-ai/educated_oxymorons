@@ -4,14 +4,14 @@ const nextConfig = {
   images: {
     domains: ['encrypted-tbn0.gstatic.com', 'tvinccnmqzniuaenjngl.supabase.co'],
   },
-  async rewrites() {
-    return [
-      {
-        source: '/Memes',
-        destination: '/memes',
-      },
-    ]
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/Memes',
+  //       destination: '/memes',
+  //     },
+  //   ]
+  // },
 }
 
 module.exports = nextConfig
