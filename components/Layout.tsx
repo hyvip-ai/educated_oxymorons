@@ -6,7 +6,11 @@ interface LayoutProps {
 }
 
 function Layout(props: LayoutProps) {
-  return <main className={`layout ${props.className}`}>{props.children}</main>;
+  return (
+    <main className={`layout ${props.className ? props.className : ''}`}>
+      {props.children}
+    </main>
+  );
 }
 
 export default Layout;

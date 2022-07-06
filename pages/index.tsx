@@ -52,7 +52,7 @@ const Home = (props: homeProps) => {
             }`}
             key={item.id}
           >
-            <Link href={`/${item.name.toLowerCase()}`}>
+            <Link href={`/${item.name}`}>
               <a>
                 Check &quot;{item.name.toUpperCase()}&quot;{' '}
                 {item.name === 'Memes' ? '' : 'comics'}
