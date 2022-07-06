@@ -88,7 +88,6 @@ function Memes(props: memeProps) {
 
   return (
     <>
-    This is the meme page
       <SEO title='Meme' description='This page contains all the memes' />
       <BackButton />
       <Layout>
