@@ -78,7 +78,7 @@ function Meme() {
     }
     if (data) {
       toast.success('Meme updated successfully');
-      router.push('/memes');
+      router.push('/Memes');
     }
   };
 

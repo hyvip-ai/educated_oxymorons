@@ -18,7 +18,6 @@ export const getServerSideProps: GetServerSideProps = async (
     .from<Comic>('comic')
     .select('*')
     .eq('id', context.query.id!.toString());
-
   if (error) {
     return {
       props: {
@@ -33,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (
   }
   return {
     props: {
-      comic: comic[0],
+      comic: comic[0] || null,
     },
   };
 };
@@ -52,12 +51,12 @@ function ComicDescription(props: ComicDescriptionProps) {
       <BackButton />
       <Layout>
         <h3>Comic Name:</h3>
-        <p>{props.comic.title}</p>
+        <p>{props.comic?.title}</p>
         <h3>Comic Description:</h3>
-        <p>{props.comic.description}</p>
-        <h5>Comic Type : {props.comic.type}</h5>
+        <p>{props.comic?.description}</p>
+        <h5>Comic Type : {props.comic?.type}</h5>
         <h2>Pages:</h2>
-        {props.comic.pages.map((page, index) => (
+        {props.comic?.pages.map((page, index) => (
           <Fragment key={index}>
             <h4>Page : {index + 1}</h4>
             <h3>Page Conversation:</h3>
@@ -67,7 +66,8 @@ function ComicDescription(props: ComicDescriptionProps) {
             {page.imageLink ? (
               <>
                 <h3>Image References:</h3>
-                <p>{page.imageLink}</p>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={page.imageLink} alt='poster' className="comic_image" />
               </>
             ) : null}
           </Fragment>

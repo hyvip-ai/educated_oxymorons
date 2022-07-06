@@ -178,6 +178,12 @@ input[type='checkbox'] {
   cursor: pointer;
 }
 
+.comic_image{
+height: 250px;
+width: 250px;
+object-fit: contain;
+}
+
 
 @media(max-width: 768px) {
   .layout {

@@ -53,7 +53,7 @@ function MemeTable(props: MemeTableProps) {
               <td>
                 <button
                   className='btn btn-outline-primary'
-                  onClick={() => router.push(`/memes/${item.id}`)}
+                  onClick={() => router.push(`/Memes/${item.id}`)}
                 >
                   View Meme
                 </button>

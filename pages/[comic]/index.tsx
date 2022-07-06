@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (
   return {
     props: {
       comics,
-      comicType: comicType.toLowerCase(),
+      comicType: comicType,
     },
   };
 };
@@ -108,7 +108,7 @@ function Comic(props: ComicTableProps) {
   return (
     <>
       <SEO
-        title={`${props.comicType[0].toUpperCase() + props.comicType.slice(1)}`}
+        title={`${props.comicType}`}
         description={`This page contains all the ${props.comicType} comics`}
       />
       <BackButton />
