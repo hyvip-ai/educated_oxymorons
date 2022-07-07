@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { useForm, FormProvider, useFieldArray } from 'react-hook-form';
 import * as yup from 'yup';
@@ -6,13 +6,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Input from '../FormInputs/Input';
 import TextArea from '../FormInputs/TextArea';
 import PageForm from './PageForm';
-import { idea } from '../../types/comicTypes';
+import { Comic, idea } from '../../types/comicTypes';
 import supabase from '../../utils/supabase';
 import { toast } from 'react-toastify';
 import { ClipLoader } from 'react-spinners';
 import { useRouter } from 'next/router';
 interface comicProps {
   type: string;
+  edit?: boolean;
+  comic?: Comic;
 }
 
 const schema = yup.object().shape({
@@ -55,21 +57,56 @@ function Comic(props: comicProps) {
       return;
     }
 
-    const { data, error } = await supabase
+    if(props.edit){
+      const { data, error } = await supabase
+        .from('comic')
+        .update({ ...formData, type: props.type })
+        .eq('id', props.comic?.id);
+        if (data) {
+          toast.success(`Comic Idea Updated Successfully`);
+            router.push(`/${props.type}/${props.comic?.id}`);
+          }
+          
+          if (error) {
+            toast.error(error.message);
+          }
+    }else{
+      const { data, error } = await supabase
       .from('comic')
       .insert([{ ...formData, type: props.type }]);
-    setLoading(false);
-    if (data) {
-      toast.success(
-        `New Comic Idea names "${data[0].title}" Added Successfully`
-      );
-      router.push(`/${props.type}`);
+      if (data) {
+        toast.success(
+          `New Comic Idea names "${data[0].title}" Added Successfully`
+          );
+          router.push(`/${props.type}`);
+        }
+        
+        if (error) {
+          toast.error(error.message);
+        }
     }
-
-    if (error) {
-      toast.error(error.message);
-    }
+        setLoading(false);
   };
+
+  useEffect(() => {
+    if (props.edit) {
+      const data: idea = {
+        title: props.comic!.title,
+        description: props.comic!.description,
+        pages: [...props.comic!.pages],
+      };
+      methods.reset({
+        ...data,
+      });
+    }
+    return ()=>{
+      methods.reset({
+        title: '',
+        description: '',
+        pages: [],
+      });
+    }
+  }, [methods, props.comic, props.edit]);
   return (
     <FormProvider {...methods}>
       <Form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -121,7 +158,7 @@ function Comic(props: comicProps) {
             disabled={loading}
           >
             <div className='d-flex align-items-center justify-content-between'>
-              <span className={loading ? 'me-3' : ''}> Add Comic Idea </span>
+              <span className={loading ? 'me-3' : ''}> {props.edit?'Edit':'Add'} Comic Idea </span>
               <ClipLoader size={25} color='' loading={loading} />
             </div>
           </button>

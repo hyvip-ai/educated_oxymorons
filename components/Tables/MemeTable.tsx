@@ -64,16 +64,16 @@ function MemeTable(props: MemeTableProps) {
                     View Meme
                   </Dropdown.Item>
                   <Dropdown.Item
-                    eventKey='delete'
-                    onClick={() => props.handleDeleteMeme(item.id)}
-                  >
-                    Delete Meme
-                  </Dropdown.Item>
-                  <Dropdown.Item
                     eventKey='Edit'
                     onClick={() => router.push(`/Memes/${item.id}/edit`)}
                   >
                     Edit Meme
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    eventKey='delete'
+                    onClick={() => props.handleDeleteMeme(item.id)}
+                  >
+                    Delete Meme
                   </Dropdown.Item>
                 </DropdownButton>
               </td>
