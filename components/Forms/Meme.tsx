@@ -70,6 +70,7 @@ function Meme(props: formProps) {
     setLoading(true);
     if (!imageUrl.length) {
       toast.error('You need to upload minimum one image');
+    setLoading(false);
       return;
     }
     const myMemeData = { ...formData, memeTemplates: imageUrl };
