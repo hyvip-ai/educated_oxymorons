@@ -1,11 +1,11 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import React from 'react';
-import BackButton from '../../components/BackButton';
-import BlurImage from '../../components/BlurImage';
-import Layout from '../../components/Layout';
-import SEO from '../../components/SEO';
-import { Meme } from '../../types/comicTypes';
-import supabase from '../../utils/supabase';
+import BackButton from '../../../components/BackButton';
+import BlurImage from '../../../components/BlurImage';
+import Layout from '../../../components/Layout';
+import SEO from '../../../components/SEO';
+import { Meme } from '../../../types/comicTypes';
+import supabase from '../../../utils/supabase';
 
 
 export const getServerSideProps: GetServerSideProps = async (

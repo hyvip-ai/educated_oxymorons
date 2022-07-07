@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import BlurImage from '../BlurImage';
+import { Meme } from '../../types/comicTypes';
 
 interface formData {
   memeDescription: string;
@@ -23,7 +24,12 @@ const defaultValues: formData = {
   memeDescription: '',
 };
 
-function Meme() {
+interface formProps{
+  meme?:Meme
+  edit?:boolean
+}
+
+function Meme(props: formProps) {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -67,20 +73,52 @@ function Meme() {
       return;
     }
     const myMemeData = { ...formData, memeTemplates: imageUrl };
-    const { data, error } = await supabase
-      .from('memes')
-      .insert([{ ...myMemeData }]);
+    if(props.edit){
+      const { data, error } = await supabase
+        .from('memes')
+        .update({ ...myMemeData })
+        .eq('id', props.meme?.id);
+        if (error) {
+          toast.error(error.message);
+        }
+        if (data) {
+          toast.success('Meme updated successfully');
+          router.push(`/Memes/${props.meme?.id}`);
+        }
+    }else{
+      const { data, error } = await supabase
+        .from('memes')
+        .insert([{ ...myMemeData }]);
+        if (error) {
+          toast.error(error.message);
+        }
+        if (data) {
+          toast.success('Meme Added successfully');
+          router.push('/Memes');
+        }
+    }
 
     setLoading(false);
 
-    if (error) {
-      toast.error(error.message);
-    }
-    if (data) {
-      toast.success('Meme updated successfully');
-      router.push('/Memes');
-    }
   };
+
+  useEffect(() => {
+    if (props.edit) {
+      methods.reset({
+        memeDescription: props.meme?.memeDescription,
+      });
+      setImageUrl((prev) => [...prev, ...props.meme?.memeTemplates!]);
+    }
+    return () => {
+      methods.reset({
+        memeDescription: '',
+      });
+      setImageUrl([]);
+    };
+  }, [methods, props.meme, props.edit]);
+  const handleDeleteImage = (imageUrl:string)=>{
+    setImageUrl((prev) => prev.filter((image) => image !== imageUrl));
+  }
 
   return (
     <>
@@ -125,13 +163,28 @@ function Meme() {
               <h3>Images:</h3>
               <div className='image-outer-wrapper'>
                 {imageUrl.map((image, index) => (
-                  <div className='image-wrapper' key={image}>
+                  <div className='image-wrapper' key={index}>
                     <BlurImage
                       src={image}
                       alt='meme-template'
                       layout='fill'
                       objectFit='contain'
                     />
+                    {props.edit ? (
+                      <div className='delete_overlay'>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          width='16'
+                          height='16'
+                          fill='currentColor'
+                          className='bi bi-trash3-fill'
+                          viewBox='0 0 16 16'
+                          onClick={() => handleDeleteImage(image)}
+                        >
+                          <path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z' />
+                        </svg>
+                      </div>
+                    ) : null}
                   </div>
                 ))}
               </div>
@@ -144,7 +197,7 @@ function Meme() {
               disabled={uploadingFile || loading}
             >
               <div className='d-flex align-items-center justify-content-between'>
-                <span className={loading ? 'me-3' : ''}> Add Meme Idea </span>
+                <span className={loading ? 'me-3' : ''}> {props.edit?'Edit':'Add'} Meme Idea </span>
                 <ClipLoader size={25} color='' loading={loading} />
               </div>
             </button>

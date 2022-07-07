@@ -185,6 +185,33 @@ object-fit: contain;
 }
 
 
+
+
+.delete_overlay{
+  position: absolute;
+  top:0;
+  left:0;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.image-wrapper:hover .delete_overlay{
+  opacity: 1;
+}
+
+.delete_overlay svg{
+  height: 50px;
+  width: 50px;
+  fill: white;
+  cursor: pointer;
+}
+
 @media(max-width: 768px) {
   .layout {
     width: 90%;

@@ -75,7 +75,7 @@ function ComicTable(props: ComicTableProps) {
                     Edit Comic
                   </Dropdown.Item>
                   <Dropdown.Item
-                    eventKey='edit'
+                    eventKey='delete'
                     onClick={() => props.handleDeleteComic(item.id)}
                   >
                     Delete Comic

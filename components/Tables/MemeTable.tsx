@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Table } from 'react-bootstrap';
+import { Dropdown, DropdownButton, Form, Table } from 'react-bootstrap';
 import { ClipLoader } from 'react-spinners';
 import { Meme } from '../../types/comicTypes';
 import { useRouter } from 'next/router';
@@ -8,6 +8,7 @@ interface MemeTableProps {
   memes: Meme[];
   loading: null | string;
   togglePublish: Function;
+  handleDeleteMeme: (memeId: string) => void;
 }
 
 function MemeTable(props: MemeTableProps) {
@@ -51,12 +52,30 @@ function MemeTable(props: MemeTableProps) {
                 </div>
               </td>
               <td>
-                <button
-                  className='btn btn-outline-primary'
-                  onClick={() => router.push(`/Memes/${item.id}`)}
+                <DropdownButton
+                  drop='start'
+                  variant='outline-primary'
+                  title='Options'
                 >
-                  View Meme
-                </button>
+                  <Dropdown.Item
+                    eventKey='view'
+                    onClick={() => router.push(`/Memes/${item.id}`)}
+                  >
+                    View Meme
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    eventKey='delete'
+                    onClick={() => props.handleDeleteMeme(item.id)}
+                  >
+                    Delete Meme
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    eventKey='Edit'
+                    onClick={() => router.push(`/Memes/${item.id}/edit`)}
+                  >
+                    Edit Meme
+                  </Dropdown.Item>
+                </DropdownButton>
               </td>
             </tr>
           ))}
