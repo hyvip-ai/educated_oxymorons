@@ -178,19 +178,19 @@ input[type='checkbox'] {
   cursor: pointer;
 }
 
-.comic_image{
-height: 250px;
-width: 250px;
-object-fit: contain;
+.comic_image {
+  height: 250px;
+  width: 250px;
+  object-fit: contain;
 }
 
 
 
 
-.delete_overlay{
+.delete_overlay {
   position: absolute;
-  top:0;
-  left:0;
+  top: 0;
+  left: 0;
   display: flex;
   background-color: rgba(0, 0, 0, 0.5);
   height: 100%;
@@ -201,15 +201,47 @@ object-fit: contain;
   transition: all 0.3s;
 }
 
-.image-wrapper:hover .delete_overlay{
+.image-wrapper:hover .delete_overlay {
   opacity: 1;
 }
 
-.delete_overlay svg{
+.delete_overlay svg {
   height: 50px;
   width: 50px;
   fill: white;
   cursor: pointer;
+}
+
+.signUp_form {
+  width: 80%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.signUp_form form {
+  width: 100%;
+}
+
+.passwordTooTip {
+  position: absolute;
+  top: 2%;
+  left: 2%;
+}
+
+.tooltip-inner {
+  max-width: 100% !important;
+  text-align: left;
+}
+
+a {
+  color: #000;
+}
+
+a:hover {
+  color: #000;
 }
 
 @media(max-width: 768px) {

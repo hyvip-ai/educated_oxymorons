@@ -1,5 +1,5 @@
 import { RealtimeSubscription } from '@supabase/supabase-js';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { Form, Table } from 'react-bootstrap';
@@ -14,7 +14,25 @@ import supabase from '../../utils/supabase';
 interface typesProps {
   types: comicTypes[];
 }
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const { user, error: loggedInError } =
+    await supabase.auth.api.getUserByCookie(context.req);
+  if (!user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/auth/login',
+      },
+      props: {},
+    };
+  }
+  const { user: me, token } = await supabase.auth.api.getUserByCookie(
+    context.req
+  );
+
+  supabase.auth.setAuth(token as string);
   let { data: comic_types, error } = await supabase
     .from<comicTypes>('comic_types')
     .select('*');

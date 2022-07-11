@@ -39,8 +39,7 @@ function Add() {
     if (data) {
       toast.success(`Type ${data[0].name} added successfully`);
       router.push('/comicTypes');
-    }
-    if (error) {
+    } else if (error) {
       toast.error('Error adding type');
     }
   };

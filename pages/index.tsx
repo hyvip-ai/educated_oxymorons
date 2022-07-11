@@ -1,15 +1,42 @@
-import type { GetServerSideProps, NextPage } from 'next';
+import type {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  NextPage,
+} from 'next';
 import SEO from '../components/SEO';
 import Link from 'next/link';
 import Layout from '../components/Layout';
 import supabase from '../utils/supabase';
 import { comicTypes } from '../types/comicTypes';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const { user, error: loggedInError } =
+    await supabase.auth.api.getUserByCookie(context.req);
+  if (!user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/auth/login',
+      },
+      props: {},
+    };
+  }
+  const { user: me, token } = await supabase.auth.api.getUserByCookie(
+    context.req
+  );
+
+  supabase.auth.setAuth(token as string);
+
   const { data: types, error } = await supabase
     .from('comic_types')
     .select('*')
     .eq('active', true);
+
   if (error) {
     return {
       props: {
@@ -29,6 +56,16 @@ interface homeProps {
 }
 
 const Home = (props: homeProps) => {
+  const router = useRouter();
+  const singOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error('Error Occurred');
+    } else {
+      toast.success('Successfully signed out');
+      router.push('/auth/login');
+    }
+  };
   return (
     <Layout>
       <SEO
@@ -62,6 +99,10 @@ const Home = (props: homeProps) => {
         ))}
         <button className='btn index_btn btn-outline-success'>
           <Link href='/idea'>&quot;Add An Idea&quot;</Link>
+        </button>
+        <button className='btn index_btn btn-outline-danger' onClick={singOut}>
+          {' '}
+          Log Out
         </button>
       </div>
     </Layout>
