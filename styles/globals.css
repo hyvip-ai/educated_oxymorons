@@ -17,7 +17,7 @@ body {
 
 
 .index_btn {
-  display: block !important;
+  display: flex !important;
   margin: 1rem auto;
   width: 80%;
 }

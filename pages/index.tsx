@@ -8,9 +8,10 @@ import Link from 'next/link';
 import Layout from '../components/Layout';
 import supabase from '../utils/supabase';
 import { comicTypes } from '../types/comicTypes';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+import { ClipLoader } from 'react-spinners';
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
@@ -57,8 +58,12 @@ interface homeProps {
 
 const Home = (props: homeProps) => {
   const router = useRouter();
+
+  const [loggingOut, setLoggingOut] = useState(false);
   const singOut = async () => {
+    setLoggingOut(true);
     const { error } = await supabase.auth.signOut();
+    setLoggingOut(false);
     if (error) {
       toast.error('Error Occurred');
     } else {
@@ -100,9 +105,15 @@ const Home = (props: homeProps) => {
         <button className='btn index_btn btn-outline-success link_btn'>
           <Link href='/idea'>&quot;Add An Idea&quot;</Link>
         </button>
-        <button className='btn index_btn btn-outline-danger' onClick={singOut}>
-          {' '}
+        <button
+          className='btn btn-outline-danger index_btn justify-content-center align-items-center'
+          onClick={singOut}
+          disabled={loggingOut}
+        >
           Log Out
+          <div className='d-flex ms-2'>
+            <ClipLoader size={25} color='' loading={loggingOut} />
+          </div>
         </button>
       </div>
     </Layout>
