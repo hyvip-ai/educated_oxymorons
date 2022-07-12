@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 interface ComicTableProps {
   comics: Comic[];
-  loading: null | string;
+  loading: string[];
   comicType: string;
   togglePublish: Function;
   handleDeleteComic: (comicId: string) => void;
@@ -41,13 +41,13 @@ function ComicTable(props: ComicTableProps) {
                     className='me-3'
                     checked={item.published}
                     onChange={(e) => props.togglePublish(e, item.id)}
-                    disabled={item.id === props.loading}
+                    disabled={props.loading.includes(item.id)}
                   />
                   <div className='loader_layout'>
                     <ClipLoader
                       size={25}
                       color=''
-                      loading={props.loading === item.id}
+                      loading={props.loading.includes(item.id)}
                     />
                   </div>
                 </div>

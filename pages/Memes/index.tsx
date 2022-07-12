@@ -19,8 +19,7 @@ interface memeProps {
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const { user, error: loggedInError } =
-    await supabase.auth.api.getUserByCookie(context.req);
+  const { user, token } = await supabase.auth.api.getUserByCookie(context.req);
   if (!user) {
     return {
       redirect: {
@@ -30,9 +29,6 @@ export const getServerSideProps: GetServerSideProps = async (
       props: {},
     };
   }
-  const { user: me, token } = await supabase.auth.api.getUserByCookie(
-    context.req
-  );
 
   supabase.auth.setAuth(token as string);
   const { data: memes, error } = await supabase.from('memes').select('*');
@@ -55,17 +51,20 @@ function Memes(props: memeProps) {
   const [memes, setMemes] = useState<Meme[]>(props.memes);
   const [publishedMemes, setPublishedMemes] = useState<Meme[]>([]);
   const [unpublishedMemes, setUnpublishedMemes] = useState<Meme[]>([]);
-  const [loading, setLoading] = useState<null | string>(null);
+  const [loading, setLoading] = useState<string[]>([]);
   const togglePublish = async (
     e: React.ChangeEvent<HTMLInputElement>,
     id: string
   ) => {
-    setLoading(id);
+    setLoading((prev) => [...prev, id]);
     const { data, error } = await supabase
       .from('memes')
       .update({ published: e.target.checked })
       .eq('id', id);
-    setLoading(null);
+    setLoading((prev) => {
+      const newLoading = [...prev].filter((item) => item !== id);
+      return [...newLoading];
+    });
     if (error) {
       toast.error("You can't update memes");
     }

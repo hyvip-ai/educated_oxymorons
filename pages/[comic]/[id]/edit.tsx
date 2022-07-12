@@ -24,8 +24,7 @@ interface EditProps {
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const { user, error: loggedInError } =
-    await supabase.auth.api.getUserByCookie(context.req);
+  const { user, token } = await supabase.auth.api.getUserByCookie(context.req);
   if (!user) {
     return {
       redirect: {
@@ -35,9 +34,6 @@ export const getServerSideProps: GetServerSideProps = async (
       props: {},
     };
   }
-  const { user: me, token } = await supabase.auth.api.getUserByCookie(
-    context.req
-  );
 
   supabase.auth.setAuth(token as string);
   const { data: comics, error } = await supabase

@@ -19,8 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   const comicType = context.query.comic as string;
-  const { user, error: loggedInError } =
-    await supabase.auth.api.getUserByCookie(context.req);
+  const { user, token } = await supabase.auth.api.getUserByCookie(context.req);
   if (!user) {
     return {
       redirect: {
@@ -30,9 +29,6 @@ export const getServerSideProps: GetServerSideProps = async (
       props: {},
     };
   }
-  const { user: me, token } = await supabase.auth.api.getUserByCookie(
-    context.req
-  );
 
   supabase.auth.setAuth(token as string);
   let { data: comics, error } = await supabase
@@ -53,22 +49,24 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 function Comic(props: ComicTableProps) {
-  console.log(props.comics);
   const [filterData, setFilterData] = useState<string>('all');
   const [comics, setComics] = useState<Comic[]>(props.comics);
   const [publishedComics, setPublishedComics] = useState<Comic[]>([]);
   const [unPublishedComics, setUnPublishedComics] = useState<Comic[]>([]);
-  const [loading, setLoading] = useState<null | string>(null);
+  const [loading, setLoading] = useState<string[]>([]);
   const togglePublish = async (
     e: React.ChangeEvent<HTMLInputElement>,
     id: string
   ) => {
-    setLoading(id);
+    setLoading((prev) => [...prev, id]);
     const { data, error } = await supabase
       .from('comic')
       .update({ published: e.target.checked })
       .eq('id', id);
-    setLoading(null);
+    setLoading((prev) => {
+      const newLoading = [...prev].filter((item) => item !== id);
+      return [...newLoading];
+    });
     if (error) {
       toast.error("You can't update the active status");
     } else if (data) {

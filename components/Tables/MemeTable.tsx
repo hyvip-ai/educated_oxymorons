@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 interface MemeTableProps {
   memes: Meme[];
-  loading: null | string;
+  loading: string[];
   togglePublish: Function;
   handleDeleteMeme: (memeId: string) => void;
 }
@@ -40,13 +40,13 @@ function MemeTable(props: MemeTableProps) {
                     className='me-3'
                     checked={item.published}
                     onChange={(e) => props.togglePublish(e, item.id)}
-                    disabled={item.id === props.loading}
+                    disabled={props.loading.includes(item.id)}
                   />
                   <div className='loader_layout'>
                     <ClipLoader
                       size={25}
                       color=''
-                      loading={props.loading === item.id}
+                      loading={props.loading.includes(item.id)}
                     />
                   </div>
                 </div>

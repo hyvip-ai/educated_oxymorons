@@ -69,8 +69,6 @@ function SignUp() {
       ...formData,
     });
     if (user) {
-      console.log(user);
-      console.log(session);
       toast.success('Created a new account successfully');
     } else if (error) {
       toast.error(error.message);
