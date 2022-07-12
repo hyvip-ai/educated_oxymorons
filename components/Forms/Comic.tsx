@@ -57,35 +57,35 @@ function Comic(props: comicProps) {
       return;
     }
 
-    if(props.edit){
+    if (props.edit) {
       const { data, error } = await supabase
         .from('comic')
         .update({ ...formData, type: props.type })
         .eq('id', props.comic?.id);
-        if (data) {
-          toast.success(`Comic Idea Updated Successfully`);
-            router.push(`/${props.type}/${props.comic?.id}`);
-          }
-          
-          if (error) {
-            toast.error(error.message);
-          }
-    }else{
+      if (data) {
+        toast.success(`Comic Idea Updated Successfully`);
+        router.push(`/${props.type}/${props.comic?.id}`);
+      }
+
+      if (error) {
+        toast.error("You can't edit comics");
+      }
+    } else {
       const { data, error } = await supabase
-      .from('comic')
-      .insert([{ ...formData, type: props.type }]);
+        .from('comic')
+        .insert([{ ...formData, type: props.type }]);
       if (data) {
         toast.success(
           `New Comic Idea names "${data[0].title}" Added Successfully`
-          );
-          router.push(`/${props.type}`);
-        }
-        
-        if (error) {
-          toast.error(error.message);
-        }
+        );
+        router.push(`/${props.type}`);
+      }
+
+      if (error) {
+        toast.error("You can't add comics");
+      }
     }
-        setLoading(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -99,13 +99,13 @@ function Comic(props: comicProps) {
         ...data,
       });
     }
-    return ()=>{
+    return () => {
       methods.reset({
         title: '',
         description: '',
         pages: [],
       });
-    }
+    };
   }, [methods, props.comic, props.edit]);
   return (
     <FormProvider {...methods}>
@@ -158,7 +158,10 @@ function Comic(props: comicProps) {
             disabled={loading}
           >
             <div className='d-flex align-items-center justify-content-between'>
-              <span className={loading ? 'me-3' : ''}> {props.edit?'Edit':'Add'} Comic Idea </span>
+              <span className={loading ? 'me-3' : ''}>
+                {' '}
+                {props.edit ? 'Edit' : 'Add'} Comic Idea{' '}
+              </span>
               <ClipLoader size={25} color='' loading={loading} />
             </div>
           </button>
