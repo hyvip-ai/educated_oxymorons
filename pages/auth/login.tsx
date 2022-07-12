@@ -11,6 +11,8 @@ import Input from '../../components/FormInputs/Input';
 import Password from '../../components/FormInputs/Password';
 import PasswordToolTip from '../../components/PasswordToolTip';
 import supabase from '../../utils/supabase';
+import SEO from '../../components/SEO';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 interface LogInData {
   email: string;
@@ -38,6 +40,26 @@ const defaultValues = {
   email: '',
 };
 
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const { user, error: loggedInError } =
+    await supabase.auth.api.getUserByCookie(context.req);
+  if (user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+      props: {},
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
+
 function LogIn() {
   const router = useRouter();
 
@@ -52,38 +74,44 @@ function LogIn() {
     setLoading(false);
     if (user) {
       toast.success('Logged in successfully');
-      router.push('/');
+      router.replace('/');
     } else if (error) {
       toast.error(error.message);
     }
   };
   return (
-    <div className='signUp_form'>
-      <PasswordToolTip />
-      <FormProvider {...methods}>
-        <Form onSubmit={methods.handleSubmit(onSubmit)}>
-          <Input name='email' placeholder='Enter your email' />
-          <Password name='password' placeholder='Enter password' />
-          <Row>
-            <Button
-              variant='outline-success'
-              className='d-flex justify-content-center align-items-center'
-              type='submit'
-              disabled={loading}
-            >
-              Log In{' '}
-              <div className='ms-2 d-flex'>
-                <ClipLoader size={25} color='' loading={loading} />
-              </div>
-            </Button>
-            <p className='text-center mt-3'>
-              Don&apos;t have an account?{' '}
-              <Link href='/auth/signup'>Sign Up</Link>
-            </p>
-          </Row>
-        </Form>
-      </FormProvider>
-    </div>
+    <>
+      <SEO
+        title='Login'
+        description='This is the description page of educated oxymorons'
+      />
+      <div className='signUp_form'>
+        <PasswordToolTip />
+        <FormProvider {...methods}>
+          <Form onSubmit={methods.handleSubmit(onSubmit)}>
+            <Input name='email' placeholder='Enter your email' />
+            <Password name='password' placeholder='Enter password' />
+            <Row>
+              <Button
+                variant='outline-success'
+                className='d-flex justify-content-center align-items-center'
+                type='submit'
+                disabled={loading}
+              >
+                Log In{' '}
+                <div className='ms-2 d-flex'>
+                  <ClipLoader size={25} color='' loading={loading} />
+                </div>
+              </Button>
+              <p className='text-center mt-3'>
+                Don&apos;t have an account?{' '}
+                <Link href='/auth/signup'>Sign Up</Link>
+              </p>
+            </Row>
+          </Form>
+        </FormProvider>
+      </div>
+    </>
   );
 }
 

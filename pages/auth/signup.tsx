@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { Form, Button, Row } from 'react-bootstrap';
@@ -8,6 +9,7 @@ import * as yup from 'yup';
 import Input from '../../components/FormInputs/Input';
 import Password from '../../components/FormInputs/Password';
 import PasswordToolTip from '../../components/PasswordToolTip';
+import SEO from '../../components/SEO';
 import supabase from '../../utils/supabase';
 
 interface SignUpData {
@@ -39,6 +41,26 @@ const defaultValues = {
   userName: '',
 };
 
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const { user, error: loggedInError } =
+    await supabase.auth.api.getUserByCookie(context.req);
+  if (user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+      props: {},
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
+
 function SignUp() {
   const methods = useForm({ resolver: yupResolver(schema), defaultValues });
 
@@ -55,24 +77,34 @@ function SignUp() {
     }
   };
   return (
-    <div className='signUp_form'>
-      <PasswordToolTip />
-      <FormProvider {...methods}>
-        <Form onSubmit={methods.handleSubmit(onSubmit)}>
-          <Input name='userName' placeholder='Enter your username' />
-          <Input name='email' placeholder='Enter your email' />
-          <Password name='password' placeholder='Enter password' />
-          <Row>
-            <Button variant='outline-success' className='d-block' type='submit'>
-              Sign Up
-            </Button>
-            <p className='mt-3 text-center'>
-              Already have an account? <Link href='/auth/login'>Log in</Link>
-            </p>
-          </Row>
-        </Form>
-      </FormProvider>
-    </div>
+    <>
+      <SEO
+        title='Sign Up'
+        description='This is the signup page of educated oxymorons'
+      />
+      <div className='signUp_form'>
+        <PasswordToolTip />
+        <FormProvider {...methods}>
+          <Form onSubmit={methods.handleSubmit(onSubmit)}>
+            <Input name='userName' placeholder='Enter your username' />
+            <Input name='email' placeholder='Enter your email' />
+            <Password name='password' placeholder='Enter password' />
+            <Row>
+              <Button
+                variant='outline-success'
+                className='d-block'
+                type='submit'
+              >
+                Sign Up
+              </Button>
+              <p className='mt-3 text-center'>
+                Already have an account? <Link href='/auth/login'>Log in</Link>
+              </p>
+            </Row>
+          </Form>
+        </FormProvider>
+      </div>
+    </>
   );
 }
 
