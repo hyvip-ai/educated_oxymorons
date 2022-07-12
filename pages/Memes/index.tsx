@@ -49,7 +49,7 @@ function Memes(props: memeProps) {
       .eq('id', id);
     setLoading(null);
     if (error) {
-      toast.error(error.message);
+      toast.error("You can't update memes");
     }
     if (data) {
       toast.success('Meme Updated Successfully');
@@ -86,19 +86,18 @@ function Memes(props: memeProps) {
     await supabase.removeSubscription(subscription);
   }
 
-  const handleDeleteMeme = async (memeId:string)=>{
+  const handleDeleteMeme = async (memeId: string) => {
     const { data, error } = await supabase
       .from('memes')
       .delete()
       .eq('id', memeId);
-      if(data){
-        toast.success("Meme deleted successfully")
-        setMemes((prev) => prev.filter((meme) => meme.id !== memeId));
-      }
-      else if(error){
-        toast.error('Error deleting meme');
-      }
-  }
+    if (data) {
+      toast.success('Meme deleted successfully');
+      setMemes((prev) => prev.filter((meme) => meme.id !== memeId));
+    } else if (error) {
+      toast.error('Error deleting meme');
+    }
+  };
 
   return (
     <>

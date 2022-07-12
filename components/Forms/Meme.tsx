@@ -24,9 +24,9 @@ const defaultValues: formData = {
   memeDescription: '',
 };
 
-interface formProps{
-  meme?:Meme
-  edit?:boolean
+interface formProps {
+  meme?: Meme;
+  edit?: boolean;
 }
 
 function Meme(props: formProps) {
@@ -70,37 +70,36 @@ function Meme(props: formProps) {
     setLoading(true);
     if (!imageUrl.length) {
       toast.error('You need to upload minimum one image');
-    setLoading(false);
+      setLoading(false);
       return;
     }
     const myMemeData = { ...formData, memeTemplates: imageUrl };
-    if(props.edit){
+    if (props.edit) {
       const { data, error } = await supabase
         .from('memes')
         .update({ ...myMemeData })
         .eq('id', props.meme?.id);
-        if (error) {
-          toast.error(error.message);
-        }
-        if (data) {
-          toast.success('Meme updated successfully');
-          router.push(`/Memes/${props.meme?.id}`);
-        }
-    }else{
+      if (error) {
+        toast.error("You can't edit meme");
+      }
+      if (data) {
+        toast.success('Meme updated successfully');
+        router.push(`/Memes/${props.meme?.id}`);
+      }
+    } else {
       const { data, error } = await supabase
         .from('memes')
         .insert([{ ...myMemeData }]);
-        if (error) {
-          toast.error(error.message);
-        }
-        if (data) {
-          toast.success('Meme Added successfully');
-          router.push('/Memes');
-        }
+      if (error) {
+        toast.error("You can't add meme");
+      }
+      if (data) {
+        toast.success('Meme Added successfully');
+        router.push('/Memes');
+      }
     }
 
     setLoading(false);
-
   };
 
   useEffect(() => {
@@ -117,9 +116,9 @@ function Meme(props: formProps) {
       setImageUrl([]);
     };
   }, [methods, props.meme, props.edit]);
-  const handleDeleteImage = (imageUrl:string)=>{
+  const handleDeleteImage = (imageUrl: string) => {
     setImageUrl((prev) => prev.filter((image) => image !== imageUrl));
-  }
+  };
 
   return (
     <>
@@ -198,7 +197,10 @@ function Meme(props: formProps) {
               disabled={uploadingFile || loading}
             >
               <div className='d-flex align-items-center justify-content-between'>
-                <span className={loading ? 'me-3' : ''}> {props.edit?'Edit':'Add'} Meme Idea </span>
+                <span className={loading ? 'me-3' : ''}>
+                  {' '}
+                  {props.edit ? 'Edit' : 'Add'} Meme Idea{' '}
+                </span>
                 <ClipLoader size={25} color='' loading={loading} />
               </div>
             </button>
