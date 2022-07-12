@@ -7,10 +7,25 @@ import SEO from '../../../components/SEO';
 import { Meme } from '../../../types/comicTypes';
 import supabase from '../../../utils/supabase';
 
-
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
+  const { user, error: loggedInError } =
+    await supabase.auth.api.getUserByCookie(context.req);
+  if (!user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/auth/login',
+      },
+      props: {},
+    };
+  }
+  const { user: me, token } = await supabase.auth.api.getUserByCookie(
+    context.req
+  );
+
+  supabase.auth.setAuth(token as string);
   const { data: meme, error } = await supabase
     .from<Meme>('memes')
     .select('*')

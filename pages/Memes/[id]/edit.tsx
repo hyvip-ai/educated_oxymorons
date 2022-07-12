@@ -1,8 +1,8 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import BackButton from '../../../components/BackButton';
 import Layout from '../../../components/Layout';
-import SEO from '../../../components/SEO'
+import SEO from '../../../components/SEO';
 import { Meme } from '../../../types/comicTypes';
 import supabase from '../../../utils/supabase';
 import MemeForm from '../../../components/Forms/Meme';
@@ -10,6 +10,22 @@ import MemeForm from '../../../components/Forms/Meme';
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
+  const { user, error: loggedInError } =
+    await supabase.auth.api.getUserByCookie(context.req);
+  if (!user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/auth/login',
+      },
+      props: {},
+    };
+  }
+  const { user: me, token } = await supabase.auth.api.getUserByCookie(
+    context.req
+  );
+
+  supabase.auth.setAuth(token as string);
   const { data: memes, error } = await supabase
     .from<Meme>('memes')
     .select('*')
@@ -34,8 +50,7 @@ interface EditProps {
   memes: Meme[];
 }
 
-function Edit(props:EditProps) {
-
+function Edit(props: EditProps) {
   return (
     <>
       <SEO
@@ -50,4 +65,4 @@ function Edit(props:EditProps) {
   );
 }
 
-export default Edit
+export default Edit;
