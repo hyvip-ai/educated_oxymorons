@@ -54,28 +54,31 @@ export const getServerSideProps: GetServerSideProps = async (
 
 function ComicTypes(props: typesProps) {
   const [myTypes, setMyTypes] = useState<comicTypes[]>(props.types);
-  const [loading, setLoading] = useState<null | number>(null);
+  const [loading, setLoading] = useState<number[]>([]);
 
   const toggleItem = async (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string,
     id: number
   ) => {
-    setLoading(id);
-    const { data, error } = await supabase
+    setLoading((prev) => [...prev, id]);
+    const { data, error, status } = await supabase
       .from('comic_types')
       .update({ active: e.target.checked })
       .eq('name', name);
-    setLoading(null);
+    setLoading((prev) => {
+      const newArr = [...prev].filter((item) => item !== id);
+      return [...newArr];
+    });
+
     if (data) {
       toast.success(
         `Comic type ${data[0].name} is now  ${
           data[0].active ? 'active' : 'inactive'
         }`
       );
-    }
-    if (error) {
-      toast.error(error.message);
+    } else if (error) {
+      toast.error("You can't update the active status");
     }
   };
 
@@ -133,14 +136,14 @@ function ComicTypes(props: typesProps) {
                     checked={item.active}
                     onChange={(e) => toggleItem(e, item.name, item.id)}
                     className='me-3'
-                    disabled={loading === item.id}
+                    disabled={loading.includes(item.id)}
                   ></Form.Check>
 
                   <div className='loader_layout'>
                     <ClipLoader
                       size={25}
                       color=''
-                      loading={loading === item.id}
+                      loading={loading.includes(item.id)}
                     />
                   </div>
                 </td>

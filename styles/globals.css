@@ -236,6 +236,14 @@ input[type='checkbox'] {
   text-align: left;
 }
 
+.link_btn {
+  padding: 0 !important;
+}
+
+.link_btn>a {
+  padding: 6px 12px !important;
+}
+
 a {
   color: #000;
 }

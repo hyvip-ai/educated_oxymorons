@@ -13,6 +13,22 @@ interface ComicDescriptionProps {
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
+  const { user, error: loggedInError } =
+    await supabase.auth.api.getUserByCookie(context.req);
+  if (!user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/auth/login',
+      },
+      props: {},
+    };
+  }
+  const { user: me, token } = await supabase.auth.api.getUserByCookie(
+    context.req
+  );
+
+  supabase.auth.setAuth(token as string);
   const { data: comic, error } = await supabase
     .from<Comic>('comic')
     .select('*')
@@ -66,7 +82,11 @@ function ComicDescription(props: ComicDescriptionProps) {
               <>
                 <h3>Image References:</h3>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={page.imageLink} alt='poster' className="comic_image" />
+                <img
+                  src={page.imageLink}
+                  alt='poster'
+                  className='comic_image'
+                />
               </>
             ) : null}
           </Fragment>

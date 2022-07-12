@@ -77,14 +77,14 @@ const Home = (props: homeProps) => {
       </h1>
       <p className='text-center'> What you want to do? </p>
       <div>
-        <button className='btn btn-outline-primary index_btn'>
+        <button className='btn btn-outline-primary index_btn link_btn'>
           <Link href='/comicTypes'>
             Check the &quot;Type of Comics&quot; we make currently
           </Link>
         </button>
         {props.types.map((item, index) => (
           <button
-            className={`btn index_btn btn-outline-${
+            className={`btn index_btn link_btn btn-outline-${
               index % 2 ? 'primary' : 'info'
             }`}
             key={item.id}
@@ -97,7 +97,7 @@ const Home = (props: homeProps) => {
             </Link>
           </button>
         ))}
-        <button className='btn index_btn btn-outline-success'>
+        <button className='btn index_btn btn-outline-success link_btn'>
           <Link href='/idea'>&quot;Add An Idea&quot;</Link>
         </button>
         <button className='btn index_btn btn-outline-danger' onClick={singOut}>

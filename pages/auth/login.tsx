@@ -49,9 +49,9 @@ function LogIn() {
     const { user, session, error } = await supabase.auth.signIn({
       ...formData,
     });
+    setLoading(false);
     if (user) {
       toast.success('Logged in successfully');
-      setLoading(false);
       router.push('/');
     } else if (error) {
       toast.error(error.message);

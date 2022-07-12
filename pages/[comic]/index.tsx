@@ -18,8 +18,23 @@ interface ComicTableProps {
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const comicType = (context.query.comic as string)
+  const comicType = context.query.comic as string;
+  const { user, error: loggedInError } =
+    await supabase.auth.api.getUserByCookie(context.req);
+  if (!user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/auth/login',
+      },
+      props: {},
+    };
+  }
+  const { user: me, token } = await supabase.auth.api.getUserByCookie(
+    context.req
+  );
 
+  supabase.auth.setAuth(token as string);
   let { data: comics, error } = await supabase
     .from('comic')
     .select('*')
@@ -38,6 +53,7 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 function Comic(props: ComicTableProps) {
+  console.log(props.comics);
   const [filterData, setFilterData] = useState<string>('all');
   const [comics, setComics] = useState<Comic[]>(props.comics);
   const [publishedComics, setPublishedComics] = useState<Comic[]>([]);
@@ -54,9 +70,8 @@ function Comic(props: ComicTableProps) {
       .eq('id', id);
     setLoading(null);
     if (error) {
-      toast.error(error.message);
-    }
-    if (data) {
+      toast.error("You can't update the active status");
+    } else if (data) {
       toast.success('Comic Updated Successfully');
     }
   };
@@ -91,18 +106,17 @@ function Comic(props: ComicTableProps) {
     await supabase.removeSubscription(subscription);
   }
 
-  const handleDeleteComic = async (comicId:string) => {
+  const handleDeleteComic = async (comicId: string) => {
     const { data, error } = await supabase
       .from('comic')
       .delete()
       .eq('id', comicId);
-      if(data){
-        toast.success("Comci deleted successfully");
-        setComics(comics.filter((comic) =>comic.id !== comicId))
-      }
-      else if(error){
-        toast.error('Error occurred while deleting comic');
-      }
+    if (data) {
+      toast.success('Comic deleted successfully');
+      setComics(comics.filter((comic) => comic.id !== comicId));
+    } else if (error) {
+      toast.error('Error occurred while deleting comic');
+    }
   };
 
   return (

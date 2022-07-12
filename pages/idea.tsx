@@ -3,7 +3,7 @@ import SEO from '../components/SEO';
 import Layout from '../components/Layout';
 import BackButton from '../components/BackButton';
 import supabase from '../utils/supabase';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { comicTypes } from '../types/comicTypes';
 import Select from 'react-select';
 import Meme from '../components/Forms/Meme';
@@ -38,7 +38,25 @@ const customStyles = {
 interface typesProps {
   types: comicTypes[];
 }
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const { user, error: loggedInError } =
+    await supabase.auth.api.getUserByCookie(context.req);
+  if (!user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/auth/login',
+      },
+      props: {},
+    };
+  }
+  const { user: me, token } = await supabase.auth.api.getUserByCookie(
+    context.req
+  );
+
+  supabase.auth.setAuth(token as string);
   let { data: comic_types, error } = await supabase
     .from<comicTypes>('comic_types')
     .select('*')
