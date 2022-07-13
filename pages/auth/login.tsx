@@ -74,6 +74,13 @@ function LogIn() {
     setLoading(false);
     if (user) {
       toast.success('Logged in successfully');
+      const session = supabase.auth.session();
+      fetch('/api/auth', {
+        method: 'POST',
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+        credentials: 'same-origin',
+        body: JSON.stringify({ event: 'SIGNED_IN', session }),
+      });
       router.replace('/');
     } else if (error) {
       toast.error(error.message);
