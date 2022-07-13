@@ -75,7 +75,7 @@ function LogIn() {
     if (user) {
       toast.success('Logged in successfully');
       const session = supabase.auth.session();
-      fetch('/api/auth', {
+      await fetch('/api/auth', {
         method: 'POST',
         headers: new Headers({ 'Content-Type': 'application/json' }),
         credentials: 'same-origin',

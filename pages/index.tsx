@@ -65,7 +65,7 @@ const Home = (props: homeProps) => {
     } else {
       toast.success('Successfully signed out');
       const session = supabase.auth.session();
-      fetch('/api/auth', {
+      await fetch('/api/auth', {
         method: 'POST',
         headers: new Headers({ 'Content-Type': 'application/json' }),
         credentials: 'same-origin',
