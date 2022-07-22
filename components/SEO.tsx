@@ -9,7 +9,7 @@ interface headProps {
 function SEO(props: headProps) {
   return (
     <Head>
-      <title>{props.title} | Educated Oxymorons</title>
+      <title>{props.title} | The Witty Monger</title>
       <meta name='description' content={props.description} />
       <meta
         property='og:title'

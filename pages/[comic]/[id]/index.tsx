@@ -53,6 +53,10 @@ function ComicDescription(props: ComicDescriptionProps) {
     query: { comic },
   } = useRouter();
 
+  const getHtml = (str: string) => {
+    return str.replaceAll('\n', '<br />');
+  };
+
   return (
     <>
       <SEO
@@ -71,7 +75,11 @@ function ComicDescription(props: ComicDescriptionProps) {
           <Fragment key={index}>
             <h4>Page : {index + 1}</h4>
             <h3>Page Conversation:</h3>
-            <p>{page.pageConversation}</p>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: getHtml(page.pageConversation),
+              }}
+            />
             <h3>Page image Description:</h3>
             <p>{page.imageDescription}</p>
             {page.imageLink ? (

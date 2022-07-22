@@ -81,7 +81,7 @@ const Home = (props: homeProps) => {
         description='Welcome to the Home page of educated oxymorons dashboard'
       />
       <h1 className='text-center'>
-        Welcome to the dashboard of Educated Oxymorons
+        Welcome to the dashboard of &quot;The Witty Monger&quot;
       </h1>
       <p className='text-center'> What you want to do? </p>
       <div>
