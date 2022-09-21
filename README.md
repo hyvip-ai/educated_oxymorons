@@ -15,11 +15,11 @@ The project is created on SupaBase and Its a really great CMS option and after t
 ### Frontend Specifications
    The frontend is a next.js project with typescript for type safety and extra flexibilitty
 Frontend folder structure is like this:
-|->public (assets)
-|->pages (all the pages)
-|->utils (supabase configuration)
-|->styles (All the style sheets)
-|->types (all interfaces)
+|->public (assets) <br>
+|->pages (all the pages) <br>
+|->utils (supabase configuration) <br>
+|->styles (All the style sheets) <br>
+|->types (all interfaces) <br>
 
 Also frontend is configures with eslint, commitlint, prettier, commitizen, cz-conventional and husky to reduce error while commiting and publishing code
 
